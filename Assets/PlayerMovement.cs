@@ -8,9 +8,10 @@ public class PlayerMovement : MonoBehaviour
 {
     public bool myTurn;
     public Vector2 myVelocity;
-    public GameObject jet;
+    public GameObject jet, hair;
     public int currentThrust;
     public Slider thrustSlider;
+    public float moveDuration = 0.44f;
 
     
     // Start is called before the first frame update
@@ -24,8 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {   
-
+    {
         //Debug.DrawRay(transform.position, myVelocity * hit.distance, Color.white);
 
         if (Input.anyKeyDown && myTurn)
@@ -57,50 +57,72 @@ public class PlayerMovement : MonoBehaviour
                 HandleMovement(new Vector2(0f, 0f));
 
                 
-                currentThrust = Mathf.Clamp(currentThrust + 1, 1, 3);
-                thrustSlider.value = currentThrust;
+ 
 
 
             }
+
+
         }
     }
 
     private void HandleMovement(Vector2 vel)
     {
         myTurn = false;
-
-        jet.transform.localPosition = new Vector3(-vel.x, -vel.y, 0.1f);
-        jet.SetActive(true);
+        if (currentThrust >= 1 && vel != Vector2.zero)
+        {
+            jet.transform.localPosition = new Vector3(-vel.x, -vel.y, 0.1f);
+            jet.transform.localScale = new Vector3(currentThrust, currentThrust, jet.transform.localScale.z);
+            jet.SetActive(true);
+        }
 
         GetComponent<LineRenderer>().SetPosition(1, Vector3.zero);
 
-
-
+        
         myVelocity.Set(myVelocity.x + vel.x * currentThrust, myVelocity.y + vel.y * currentThrust);
-        if (vel != Vector2.zero)
+
+        if (vel == Vector2.zero)
         {
-            currentThrust = 1;
-            thrustSlider.value = currentThrust;
+            currentThrust = Mathf.Clamp(currentThrust + 1, 1, 3);
+            //thrustSlider.value = currentThrust;
+
+            DOTween.To(() => thrustSlider.value, x => thrustSlider.value = x, currentThrust, moveDuration);
+
         }
+        else
+        {
+            currentThrust = 0;
+            //currentThrust = Mathf.Clamp(currentThrust - 1, 0, 3);
+            //thrustSlider.value = currentThrust;
+
+            DOTween.To(() => thrustSlider.value, x => thrustSlider.value = x, currentThrust, moveDuration);
+
+        }
+
 
         RaycastHit hit;
 
         if (Physics.Raycast(transform.position, myVelocity, out hit, myVelocity.magnitude))
         {
             print("Found an object - distance: " + hit.distance);
-            transform.DOMove((hit.point), 0.44f, false).OnComplete(FinishMove);
+            transform.DOMove((hit.point), moveDuration, false).OnComplete(FinishMove);
             myVelocity = Vector3.zero;
            
         } else
-            transform.DOMove(transform.position + new Vector3(myVelocity.x, myVelocity.y, 0f), 0.44f, false).OnComplete(FinishMove);
+            transform.DOMove(transform.position + new Vector3(myVelocity.x, myVelocity.y, 0f), moveDuration, false).OnComplete(FinishMove);
+
+        hair.transform.localScale = Vector3.one * myVelocity.magnitude / 2f;
+
 
     }
 
     private void FinishMove()
     {
         jet.SetActive(false);
+        jet.transform.localScale = new Vector3(1f, 1f, jet.transform.localScale.z);
         GetComponent<LineRenderer>().SetPosition(1, myVelocity);
         TurnManager.Instance.PlayerDone();
+
     }
 
     void PlayersTurn()

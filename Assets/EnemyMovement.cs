@@ -36,7 +36,7 @@ public class EnemyMovement : MonoBehaviour
         {
             //destination = transform.position + Vector3.right * 2f;
         }
-        TurnManager.Instance.EnemyDone();
+        //TurnManager.Instance.EnemyDone();
     }
 
     void OnTriggerEnter2D(Collider2D other) {

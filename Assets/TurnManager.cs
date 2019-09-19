@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 public class TurnManager : MonoBehaviour
 {
     PlayerMovement thePlayer;
-    EnemyMovement theEnemy;
+    
+    EnemyManager theEnemyManager;
 
     public enum TurnState
     {
@@ -20,7 +21,7 @@ public class TurnManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -36,7 +37,7 @@ public class TurnManager : MonoBehaviour
     void Start()
     {
         thePlayer = GameObject.Find("Player").GetComponent<PlayerMovement>();
-        theEnemy = GameObject.Find("enemy").GetComponent<EnemyMovement>();
+        theEnemyManager = GameObject.FindObjectOfType<EnemyManager>();
         currentTurn = TurnState.Idle;
     }
 
@@ -55,8 +56,9 @@ public class TurnManager : MonoBehaviour
             case TurnState.Waiting:
                 break;
             case TurnState.Enemy:
-                theEnemy.myTurn = true;
-                currentTurn = TurnState.Waiting;
+                theEnemyManager.MoveEnemies();
+                
+                
                 break;
             default:
                 break;
