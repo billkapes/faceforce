@@ -12,8 +12,18 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-
+        if (Instance == null)
+        {
+            Instance = this;
+            //DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
+
+    public static GameManager Instance { get; private set; }
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +45,13 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(1);
         }   
     }
+
+    public void FoundGoal()
+    {
+        panel.GetComponent<Image>().DOFade(1, 1);
+    }
+
+    
 
     void EnterScene()
     {
