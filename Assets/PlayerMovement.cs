@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     public Slider thrustSlider;
     public float moveDuration = 0.44f;
 
+    TouchInput touchInput;
+
     
     // Start is called before the first frame update
     void Start()
@@ -23,51 +25,58 @@ public class PlayerMovement : MonoBehaviour
         thrustSlider.value = currentThrust;
     }
 
+    void Awake()
+    {
+        touchInput = GetComponent<TouchInput>();
+    }
+
     // Update is called once per frame
     void Update()
     {
         //Debug.DrawRay(transform.position, myVelocity * hit.distance, Color.white);
 
-        if (Input.anyKeyDown && myTurn)
+        if ( (Input.anyKeyDown || touchInput.gotTouch) && myTurn)
         {
-            
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
+
+            touchInput.gotTouch = false;
+
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || touchInput.touchResult == TouchDirection.left)
             {
                 HandleMovement(new Vector2(-1f, 0f));
             
             } else
-            if (Input.GetKeyDown(KeyCode.RightArrow))
+            if (Input.GetKeyDown(KeyCode.RightArrow) || touchInput.touchResult == TouchDirection.right)
             {
                 HandleMovement(new Vector2(1f, 0f));
 
             } else
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.UpArrow) || touchInput.touchResult == TouchDirection.up)
             {
                 HandleMovement(new Vector2(0f, 1f));
                 
             } else
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (Input.GetKeyDown(KeyCode.DownArrow) || touchInput.touchResult == TouchDirection.down)
             {
                 HandleMovement(new Vector2(0f, -1f));
                 
             } else
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) || touchInput.touchResult == TouchDirection.none)
             {
                 HandleMovement(new Vector2(0f, 0f));
-
-                
- 
 
 
             }
 
+            touchInput.touchResult = TouchDirection.idle;
 
         }
     }
 
     private void HandleMovement(Vector2 vel)
     {
+
+
         if (currentThrust == 0f && vel != Vector2.zero)
             return;
 
