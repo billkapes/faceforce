@@ -78,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
 
 
         if (currentThrust == 0f && vel != Vector2.zero)
-            return;
+            vel = Vector2.zero;
 
         myTurn = false;
 

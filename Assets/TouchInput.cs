@@ -44,7 +44,7 @@ public class TouchInput : MonoBehaviour
 
                 case TouchPhase.Ended:
 
-                    if (direction.magnitude < 100)
+                    if (direction.magnitude < 50)
                     {
                         touchResult = TouchDirection.none;
                     }
