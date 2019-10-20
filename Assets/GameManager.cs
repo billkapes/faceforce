@@ -9,6 +9,7 @@ using DG.Tweening;
 public class GameManager : MonoBehaviour
 {
     public GameObject panel;
+    public Light light;
 
     void Awake()
     {
@@ -28,13 +29,22 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //FadeIn();
+        light.intensity = 25;
+
+        light.DOIntensity(1, 1);
+
+        TurnManager.Instance.currentTurn = TurnManager.TurnState.Player;
+
+    }
+
+    private void FadeIn()
+    {
         var color = Color.black;
         color.a = 1f;
         panel.GetComponent<Image>().color = color;
 
         panel.GetComponent<Image>().DOFade(0, 1);
-        TurnManager.Instance.currentTurn = TurnManager.TurnState.Player;
-
     }
 
     // Update is called once per frame
@@ -48,7 +58,8 @@ public class GameManager : MonoBehaviour
 
     public void FoundGoal()
     {
-        panel.GetComponent<Image>().DOFade(1, 1);
+        light.DOIntensity(25, 1);
+        //panel.GetComponent<Image>().DOFade(1, 1);
     }
 
     

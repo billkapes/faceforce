@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
-    public GameObject[] upperLefts;
-    public Transform upperLeft;
+    public GameObject[] levels;
+    public Transform Obs;
 
     // Start is called before the first frame update
     void Start()
     {
-        Instantiate(upperLefts[Random.Range(0, upperLefts.Length)], upperLeft);
+        Instantiate(levels[Random.Range(0, levels.Length)], Obs);
     }
 
     // Update is called once per frame
