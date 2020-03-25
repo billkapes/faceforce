@@ -29,7 +29,7 @@ public class EnemyManager : MonoBehaviour
             
         }
 
-        TurnManager.Instance.currentTurn = TurnManager.TurnState.Player;
+        TurnManager.Instance.EnemyDone();
     }
 
     

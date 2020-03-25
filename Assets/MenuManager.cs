@@ -26,7 +26,7 @@ public class MenuManager : MonoBehaviour
     public void StartButton() {
         GetComponent<Animator>().SetTrigger("StartButton");
         GetComponent<AudioSource>().Play();
-        Invoke("LoadScene", 1f);
+        Invoke("LoadScene", 2f);
     }
 
     void LoadScene()

@@ -73,22 +73,21 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void HandleMovement(Vector2 vel)
+    private void HandleMovement(Vector2 inputVel)
     {
-
-
-        if (currentThrust == 0f && vel != Vector2.zero)
-            vel = Vector2.zero;
 
         myTurn = false;
 
+        if (currentThrust == 0f && inputVel != Vector2.zero)
+            inputVel = Vector2.zero;
+
         GetComponent<LineRenderer>().SetPosition(1, Vector3.zero);
 
-        myVelocity.Set(myVelocity.x + vel.x * currentThrust, myVelocity.y + vel.y * currentThrust);
+        myVelocity.Set(myVelocity.x + inputVel.x * currentThrust, myVelocity.y + inputVel.y * currentThrust);
 
-        SetJet(vel);
+        SetJet(inputVel);
 
-        TweenSlider(vel);
+        TweenSlider(inputVel);
 
 
         if (Physics.Raycast(transform.position, myVelocity, out RaycastHit hit, myVelocity.magnitude))

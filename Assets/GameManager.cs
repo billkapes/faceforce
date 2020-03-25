@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject panel;
     public Light light;
 
+    // create instance
     void Awake()
     {
         if (Instance == null)
@@ -23,10 +24,9 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     public static GameManager Instance { get; private set; }
 
-    // Start is called before the first frame update
+    
     void Start()
     {
         //FadeIn();
@@ -38,6 +38,14 @@ public class GameManager : MonoBehaviour
 
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(1);
+        }   
+    }
+
     private void FadeIn()
     {
         var color = Color.black;
@@ -45,15 +53,6 @@ public class GameManager : MonoBehaviour
         panel.GetComponent<Image>().color = color;
 
         panel.GetComponent<Image>().DOFade(0, 1);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(1);
-        }   
     }
 
     public void FoundGoal()
