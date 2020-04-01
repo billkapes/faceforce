@@ -21,7 +21,8 @@ public class GoalController : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            SceneManager.LoadScene(1);
+            
+            GameManager.Instance.FoundGoal();
         }
     }
 }

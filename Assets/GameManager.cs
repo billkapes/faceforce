@@ -57,7 +57,8 @@ public class GameManager : MonoBehaviour
 
     public void FoundGoal()
     {
-        light.DOIntensity(25, 1);
+        light.DOIntensity(25, 1).OnComplete(ExitScene).SetEase(Ease.InOutBack);
+
         //panel.GetComponent<Image>().DOFade(1, 1);
     }
 
@@ -70,6 +71,6 @@ public class GameManager : MonoBehaviour
 
     void ExitScene()
     {
-
+        SceneManager.LoadScene(1);
     }
 }
