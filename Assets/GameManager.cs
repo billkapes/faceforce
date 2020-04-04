@@ -53,11 +53,15 @@ public class GameManager : MonoBehaviour
         panel.GetComponent<Image>().color = color;
 
         panel.GetComponent<Image>().DOFade(0, 1);
+
+        
+
     }
 
     public void FoundGoal()
     {
         light.DOIntensity(25, 1).OnComplete(ExitScene).SetEase(Ease.InOutBack);
+        DOTween.ToAlpha(() => panel.GetComponent<Image>().color, x => panel.GetComponent<Image>().color = x, 1, 2);
 
         //panel.GetComponent<Image>().DOFade(1, 1);
     }
