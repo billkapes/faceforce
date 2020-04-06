@@ -9,7 +9,7 @@ using DG.Tweening;
 public class GameManager : MonoBehaviour
 {
     public GameObject panel;
-    public Light light;
+    public Light mainLight, greenLight;
 
     // create instance
     void Awake()
@@ -30,9 +30,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //FadeIn();
-        light.intensity = 25;
 
-        light.DOIntensity(1, 1);
+        greenLight.intensity = 1;
+        greenLight.DOIntensity(0, 1);
+        panel.GetComponent<Image>().DOColor(new Color(1f, 0f, 0f, 1f), 2).From();
 
         TurnManager.Instance.currentTurn = TurnManager.TurnState.Player;
 
@@ -60,9 +61,10 @@ public class GameManager : MonoBehaviour
 
     public void FoundGoal()
     {
-        light.DOIntensity(25, 1).OnComplete(ExitScene).SetEase(Ease.InOutBack);
+        mainLight.intensity = 0;
+        greenLight.DOIntensity(25, 1).OnComplete(ExitScene).SetEase(Ease.InOutBack);
         DOTween.ToAlpha(() => panel.GetComponent<Image>().color, x => panel.GetComponent<Image>().color = x, 1, 2);
-
+        panel.GetComponent<Image>().DOColor(new Color(1f, 0f, 0f, 1f), 2);
         //panel.GetComponent<Image>().DOFade(1, 1);
     }
 
