@@ -110,6 +110,7 @@ public class PlayerMovement : MonoBehaviour
             transform.DOMove(transform.position + new Vector3(myVelocity.x, myVelocity.y, 0f), moveDuration, false).OnComplete(FinishMove);
 
         hair.transform.localScale = Vector3.one * myVelocity.magnitude / 2f;
+        GetComponent<Animator>().SetTrigger("Moving");
 
 
     }
@@ -147,6 +148,7 @@ public class PlayerMovement : MonoBehaviour
         jet.transform.localScale = new Vector3(1f, 1f, jet.transform.localScale.z);
         GetComponent<LineRenderer>().SetPosition(1, myVelocity);
         TurnManager.Instance.PlayerDone();
+        GetComponent<Animator>().SetTrigger("Idle");
 
     }
 

@@ -7,13 +7,14 @@ using DG.Tweening;
 public class EnemyMovement : MonoBehaviour
 {
     public bool myTurn;
-    Vector3 destination;
+    Vector3 destination, tmpDestination;
     bool foundPlayer;
 
     // Start is called before the first frame update
     void Start()
     {
-        destination = Vector3.left * 2f;
+        foundPlayer = false;
+        destination = Vector3.up * 1f;
     }
 
     // Update is called once per frame
@@ -24,6 +25,11 @@ public class EnemyMovement : MonoBehaviour
         if (myTurn)
         {
             myTurn = false;
+            if (foundPlayer)
+            {
+                foundPlayer = false;
+                destination = tmpDestination;
+            }
             transform.DOMove(destination, 0.44f).OnComplete(FinishMove).SetRelative();
             
             
@@ -34,18 +40,20 @@ public class EnemyMovement : MonoBehaviour
     {
         if (!foundPlayer)
         {
+
             //destination = transform.position + Vector3.right * 2f;
         }
         //TurnManager.Instance.EnemyDone();
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && !foundPlayer)
         {
             
             foundPlayer = true;
+
             //transform.rotation = Quaternion.LookRotation(destination, Vector3.up);
-            destination = (other.transform.position - transform.position).normalized * 8f;
+            tmpDestination = (other.transform.position - transform.position).normalized * 2f;
             
             GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
             
