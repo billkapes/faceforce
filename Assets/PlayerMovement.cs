@@ -6,13 +6,13 @@ using DG.Tweening;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public bool myTurn;
+    public bool myTurn, coastPressed;
     public Vector2 myVelocity;
     public GameObject jet, hair;
     public int currentThrust;
     public Slider thrustSlider;
     public float moveDuration = 0.44f;
-
+    
     TouchInput touchInput;
 
     
@@ -30,12 +30,18 @@ public class PlayerMovement : MonoBehaviour
         touchInput = GetComponent<TouchInput>();
     }
 
+    public void CoastPressed()
+    {
+        coastPressed = true;
+    }
+
+
     // Update is called once per frame
     void Update()
     {
         //Debug.DrawRay(transform.position, myVelocity * hit.distance, Color.white);
 
-        if ( (Input.anyKeyDown || touchInput.gotTouch) && myTurn)
+        if ( (Input.anyKeyDown || touchInput.gotTouch || coastPressed) && myTurn)
         {
 
             touchInput.gotTouch = false;
@@ -61,16 +67,19 @@ public class PlayerMovement : MonoBehaviour
                 
             } else
 
-            if (Input.GetKeyDown(KeyCode.Space) || touchInput.touchResult == TouchDirection.none)
+            if (Input.GetKeyDown(KeyCode.Space) || touchInput.touchResult == TouchDirection.none || coastPressed)
             {
                 HandleMovement(new Vector2(0f, 0f));
 
 
             }
 
+            
             touchInput.touchResult = TouchDirection.idle;
 
         }
+
+        coastPressed = false;
     }
 
     private void HandleMovement(Vector2 inputVel)
