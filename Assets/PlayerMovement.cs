@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public int currentThrust;
     public Slider thrustSlider;
     public float moveDuration = 0.44f;
+    public Button up, down, left, right;
     
     TouchInput touchInput;
 
@@ -164,6 +165,15 @@ public class PlayerMovement : MonoBehaviour
     void PlayersTurn()
     {
         myTurn = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Goal")
+        {
+            //transform.DOShakePosition(0.1f);
+
+        }
     }
 
 }

@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
 
     private void FadeIn()
     {
-        mainCam.DOOrthoSize(12.5f, 1).From().SetEase(Ease.OutQuint);
+        mainCam.DOOrthoSize(15f, 1).From().SetEase(Ease.OutQuint);
         greenLight.intensity = 1;
         greenLight.DOIntensity(0, 1);
         panel.GetComponent<Image>().DOColor(new Color(1f, 0f, 0f, 1f), 2).From();
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
 
     private void FadeOut()
     {
-        mainCam.DOOrthoSize(12.5f, 1).SetEase(Ease.InQuint);
+        mainCam.DOOrthoSize(15f, 1).SetEase(Ease.InQuint);
         mainLight.intensity = 0;
         greenLight.DOIntensity(25, 1).OnComplete(ExitScene).SetEase(Ease.InOutBack);
         DOTween.ToAlpha(() => panel.GetComponent<Image>().color, x => panel.GetComponent<Image>().color = x, 1, 2);

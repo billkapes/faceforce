@@ -46,7 +46,8 @@ public class TouchInput : MonoBehaviour
 
                     if (direction.magnitude < 50)
                     {
-                        touchResult = TouchDirection.none;
+                        return;
+                        //touchResult = TouchDirection.none;
                     }
                     else if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
                     {
