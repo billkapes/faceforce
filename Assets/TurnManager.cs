@@ -14,7 +14,7 @@ public class TurnManager : MonoBehaviour
         Idle, Player, Waiting, Enemy
     }
     
-    public TurnState currentTurn;
+    public TurnState currentTurn = TurnState.Idle;
 
     void Awake()
     {
@@ -38,7 +38,7 @@ public class TurnManager : MonoBehaviour
     {
         thePlayer = GameObject.Find("Player").GetComponent<PlayerMovement>();
         theEnemyManager = GameObject.FindObjectOfType<EnemyManager>();
-        currentTurn = TurnState.Idle;
+        
     }
 
     // Update is called once per frame

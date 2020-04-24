@@ -7,7 +7,7 @@ using DG.Tweening;
 public class PlayerMovement : MonoBehaviour
 {
     public bool myTurn, coastPressed;
-    public Vector2 myVelocity;
+    public Vector2 myVelocity, inputVector;
     public GameObject jet, hair;
     public int currentThrust;
     public Slider thrustSlider;
@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
         jet.SetActive(false);
         currentThrust = 1;
         thrustSlider.value = currentThrust;
+        coastPressed = false;
     }
 
     void Awake()
@@ -40,51 +41,92 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.DrawRay(transform.position, myVelocity * hit.distance, Color.white);
-
-        if ( (Input.anyKeyDown || touchInput.gotTouch || coastPressed) && myTurn)
+        if (!myTurn)
         {
+            coastPressed = false;
+            return;
+        }
 
+        //Debug.DrawRay(transform.position, myVelocity * hit.distance, Color.white);
+        if (touchInput.gotTouch)
+        {
             touchInput.gotTouch = false;
 
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || touchInput.touchResult == TouchDirection.left)
+            switch (touchInput.touchResult)
             {
-                HandleMovement(new Vector2(-1f, 0f));
-            
-            } else
-            if (Input.GetKeyDown(KeyCode.RightArrow) || touchInput.touchResult == TouchDirection.right)
-            {
-                HandleMovement(new Vector2(1f, 0f));
-
-            } else
-            if (Input.GetKeyDown(KeyCode.UpArrow) || touchInput.touchResult == TouchDirection.up)
-            {
-                HandleMovement(new Vector2(0f, 1f));
-                
-            } else
-            if (Input.GetKeyDown(KeyCode.DownArrow) || touchInput.touchResult == TouchDirection.down)
-            {
-                HandleMovement(new Vector2(0f, -1f));
-                
-            } else
-
-            if (Input.GetKeyDown(KeyCode.Space) || touchInput.touchResult == TouchDirection.none || coastPressed)
-            {
-                HandleMovement(new Vector2(0f, 0f));
-
-
+                case TouchDirection.left:
+                    inputVector = new Vector2(-1f, 0f);
+                    break;
+                case TouchDirection.right:
+                    inputVector = new Vector2(1f, 0f);
+                    break;
+                case TouchDirection.up:
+                    inputVector = new Vector2(0f, 1f);
+                    break;
+                case TouchDirection.down:
+                    inputVector = new Vector2(0f, -1f);
+                    break;
+                case TouchDirection.none:
+                    inputVector = new Vector2(0f, 0f);
+                    break;
+                case TouchDirection.idle:
+                    break;
+                default:
+                    break;
             }
+        }
 
-            
-            touchInput.touchResult = TouchDirection.idle;
+        if (coastPressed)
+        {
+            coastPressed = false;
+
+            inputVector = Vector2.zero;
+
+            HandleMovement(inputVector);
 
         }
 
-        coastPressed = false;
+        if ( (Input.anyKeyDown))
+        {
+              
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                inputVector = new Vector2(-1f, 0f);
+            
+            } else
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                inputVector = new Vector2(1f, 0f);
+
+            } else
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                inputVector = new Vector2(0f, 1f);
+                
+            } else
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                inputVector = new Vector2(0f, -1f);
+                
+            } else
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                inputVector = new Vector2(0f, 0f);
+
+            }
+
+            HandleMovement(inputVector);
+
+        }
+
+
+        
     }
 
     private void HandleMovement(Vector2 inputVel)
     {
+        inputVector = Vector2.zero;
 
         myTurn = false;
 
@@ -132,6 +174,9 @@ public class PlayerMovement : MonoBehaviour
             jet.transform.localPosition = new Vector3(-vel.x, -vel.y, 0.1f);
             jet.transform.localScale = new Vector3(currentThrust, currentThrust, jet.transform.localScale.z);
             jet.SetActive(true);
+            GetComponent<AudioSource>().Play();
+            DOTween.To(() => GetComponent<AudioSource>().volume, x => GetComponent<AudioSource>().volume = x, 0.15f, 1).From();
+            
         }
     }
 
@@ -162,10 +207,7 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    void PlayersTurn()
-    {
-        myTurn = true;
-    }
+    
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
