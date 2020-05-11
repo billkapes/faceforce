@@ -21,7 +21,7 @@ public class GoalController : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            
+            GetComponent<AudioSource>().Play();
             GameManager.Instance.FoundGoal();
         }
     }
